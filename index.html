@@ -1,85 +1,142 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Code Editor</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<style>
+    <title>CODIjoo</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+    .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--secondary-color);
+            transform: scale(1.2) rotate(15deg);
+        }
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #50e3c2;
+            --background-color: #1e1e1e;
+            --text-color: #f0f0f0;
+            --accent-color: #ff6b6b;
+        }
+
         body, html {
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             height: 100%;
-            background-color: #1e1e1e;
-            color: #f0f0f0;
+            background-color: var(--background-color);
+            color: var(--text-color);
         }
+
         .container {
             display: flex;
+            flex-direction: column;
             height: 100%;
-        }
-        .editor-container, .preview-container {
-            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
             padding: 20px;
             box-sizing: border-box;
         }
-        .editor-container {
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            animation: fadeInDown 0.5s ease-out;
+        }
+
+        .editor-preview-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 20px;
+        }
+
+        .editor-container, .preview-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             background-color: #252526;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
-        .preview-container {
-            background-color: #1e1e1e;
-            border-left: 1px solid #333;
+
+        .editor-container:hover, .preview-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
+
         .tab {
             display: flex;
             background-color: #2d2d2d;
-            border-radius: 5px 5px 0 0;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
         }
+
         .tab button {
             background-color: #2d2d2d;
             border: none;
             outline: none;
             cursor: pointer;
-            padding: 10px 20px;
+            padding: 12px 20px;
             transition: 0.3s;
             font-size: 16px;
             color: #d4d4d4;
+            flex: 1;
         }
+
         .tab button:hover {
             background-color: #3c3c3c;
         }
+
         .tab button.active {
-            background-color: #1e1e1e;
-            border-top: 2px solid #007acc;
+            background-color: var(--primary-color);
+            color: white;
         }
+
         .editor-wrapper {
             position: relative;
-            height: calc(100% - 100px);
+            flex: 1;
             overflow: hidden;
         }
+
         .editor {
             width: 100%;
             height: 100%;
-            margin-bottom: 10px;
             font-family: 'Consolas', 'Courier New', monospace;
             font-size: 14px;
             line-height: 1.5;
             padding: 10px 10px 10px 50px;
             border: none;
-            border-radius: 0 0 5px 5px;
             resize: none;
             background-color: #1e1e1e;
             color: #d4d4d4;
             overflow-y: auto;
+            overflow-x: auto;
             white-space: pre;
             tab-size: 4;
             direction: ltr;
-            min-height: 300px;
         }
+
         .line-numbers {
             position: absolute;
             left: 0;
-            top: 2;
+            top: 0;
             bottom: 0;
             width: 40px;
             padding: 10px 5px;
@@ -92,296 +149,310 @@
             user-select: none;
             overflow: hidden;
         }
+
         .preview {
             width: 100%;
-            height: calc(100% - 40px);
+            height: 100%;
             border: none;
-            border-radius: 5px;
+            border-radius: 0 0 10px 10px;
             background-color: white;
-            border: solid black 4px;
-            box-shadow: black -5px 5px 10px 5px;
         }
-        h1, h2 {
-            margin-top: 0;
-            color: #d4d4d4;
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
         }
+
         button, select {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: black;
-            border: white 4px solid;
+            background-color: var(--primary-color);
             color: white;
-            border-radius: 40px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
-            margin-right: 10px;
-        }
-        button:hover, select:hover {
-            background-color: #005999;
-        }
-        .light-theme {
-            background-color: #f0f0f0;
-            color: #333;
-        }
-        .light-theme .editor {
-            background-color: #fff;
-            color: #333;
-        }
-        .light-theme .line-numbers {
-            background-color: #f0f0f0;
-            color: #666;
-        }
-footer {
-            background-color: #2d2d2d;
-            color: #f0f0f0;
-            text-align: center;
-            padding: 20px;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
-        }
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .contact-info a {
-            display: flex;
-            align-items: center;
-            margin: 0 15px;
-            color: #fff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        .contact-info a:hover {
-            color: #007acc;
-        }
-        .contact-info i {
-            margin-right: 10px;
-            font-size: 24px;
-        }
-        .social-links {
-            display: flex;
-            justify-content: center;
-            margin-top: 15px;
-        }
-        .social-links a {
-            color: #fff;
-            margin: 0 15px;
-            font-size: 24px;
-            transition: color 0.3s ease;
-        }
-        .social-links a:hover {
-            color: #007acc;
+            transition: all 0.3s ease;
         }
 
+        button:hover, select:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Syntax Highlighting */
+        .token.comment { color: #6a9955; }
+        .token.property { color: #9cdcfe; }
+        .token.selector { color: #d7ba7d; }
+        .token.operator { color: #d4d4d4; }
+        .token.string { color: #ce9178; }
+        .token.keyword { color: #569cd6; }
+        .token.variable { color: #9cdcfe; }
+        .token.function { color: #dcdcaa; }
+        .token.tag { color: #569cd6; }
+        .token.attr-name { color: #9cdcfe; }
+        .token.attr-value { color: #ce9178; }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(74, 144, 226, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(74, 144, 226, 0);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @media (min-width: 1024px) {
+            .editor-preview-container {
+                flex-direction: row;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="editor-container ">
-            <h1> CODIjoo</h1>
-            <div class="tab">
-                <button class="tablinks active" onclick="openTab(event, 'mix')">Mixed</button>
-                <button class="tablinks" onclick="openTab(event, 'html')">HTML</button>
-                <button class="tablinks" onclick="openTab(event, 'css')">CSS</button>
-                <button class="tablinks" onclick="openTab(event, 'js')">JavaScript</button>
-            </div>
-            <div class="editor-wrapper">
-                <div class="line-numbers" id="lineNumbers"></div>
-                <textarea id="mix" class="editor tabcontent" style="display:block;" oninput="updatePreview()" spellcheck="false">
-                    <h1>This is an example</h1>
-                    Welcome to CODIjoo
-                </textarea>
-                <textarea id="html" class="editor tabcontent" style="display:none;" oninput="updatePreview()" spellcheck="false"><h1>Hello, World!</h1>
-                    <p>
-                        This is the advanced code editor.
-                    </p>
-                </textarea>
-                <textarea id="css" class="editor tabcontent" style="display:none;" oninput="updatePreview()" spellcheck="false">body {
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    background-color: #f0f0f0;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100vh;
-                    margin: 0;
-                    }
-                    h1 {
-                    color: #007acc;
-                    }
-                    p {
-                    color: #333;
-                    }</textarea>
-                <textarea id="js" class="editor tabcontent" style="display:none;" oninput="updatePreview()" spellcheck="false">console.log("Hello from JavaScript!");
-                    document.querySelector('h1').addEventListener('click', function() {
-                    this.style.color = '#' + Math.floor(Math.random()*16777215).toString(16);
-                    });</textarea>
-            </div>
-        </div>
-        <div class="preview-container">
-            <h2>Live Preview</h2>
-            <iframe id="preview" class="preview"></iframe>
-        </div>
-    </div>
-    <select id="fontSize" onchange="changeFontSize()">
-        <option value="12">Small (12px)</option>
-        <option value="14" selected>Medium (14px)</option>
-        <option value="18">Large (18px)</option>
-        <option value="24">Extra Large (24px)</option>
-    </select>
-    <button onclick="toggleTheme()">Toggle Theme</button>
-    <button onclick="startTyping()">Start Typing</button>
-    <label for="typingSpeed">Typing Speed (ms):</label>
-    <input type="number" id="typingSpeed" value="1" min="1" onchange="updateTypingSpeed()">
-
-<footer>
-    <div class="contact-info">
-        <a href="tel:+201092812463">
-            <i class="fas fa-phone" style="color: #4CAF50;"></i> اتصال مباشر
-        </a>
-        <a href="https://wa.me/+201092812463">
-            <i class="fab fa-whatsapp" style="color: #25D366;"></i> واتس اب
-        </a>
-    </div>
-    
-    <div class="social-links">
-        <a href="https://www.instagram.com/crazy_developer1698?igsh=ajNpcDRsY3VtbnF2" target="_blank">
-            <i class="fab fa-instagram" style="color: #E1306C;"></i>
-        </a>
-        <a href="https://www.tiktok.com/@joo_1078?_t=8rRQm1ZkhFZ&_r=1" target="_blank">
-            <i class="fab fa-tiktok" style="color: #69C9D0;"></i>
-        </a>
-        <a href="https://www.facebook.com/Crazydeveloper1698?mibextid=ZbWKwL" target="_blank">
-            <i class="fab fa-facebook" style="color: #3b5998;"></i>
-        </a>
-        <a href="https://www.snapchat.com/add/youssif_khalid0?share_id=7FOUsdVcG50&locale=ar-EG" target="_blank">
-            <i class="fab fa-snapchat-ghost" style="color: #FFFC00;"></i>
-        </a>
-    </div>
-</footer>
+        <h1>CODIjoo</h1>
+        <div class="editor-preview-container">
+            <div class="editor-container">
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'mix')">Mixed</button>
+                    <button class="tablinks" onclick="openTab(event, 'html')">HTML</button>
+                    <button class="tablinks" onclick="openTab(event, 'css')">CSS</button>
+                    <button class="tablinks" onclick="openTab(event, 'js')">JavaScript</button>
+                </div>
+                <div class="editor-wrapper">
+                    <div class="line-numbers" id="lineNumbers"></div>
+                    <textarea id="mix" class="editor tabcontent" style="display:block;" oninput="updatePreview()" spellcheck="false">
+<h1>welcome</h1>
+<p>in CODIjoo</p>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    h1 {
+        color: #4a90e2;
+        transition: color 0.3s ease;
+    }
+    p {
+        color: #333;
+    }
+</style>
 <script>
-    let typingSpeed = 1;
+    console.log("مرحبا من JavaScript!");
+    document.querySelector('h1').addEventListener('click', function() {
+        this.style.color = '#' + Math.floor(Math.random()*16777215).toString(16);
+    });
+</script></textarea>
+                    <textarea id="html" class="editor tabcontent" style="display:none;" oninput="updatePreview()" spellcheck="false"><h1>Welcome in </h1>
+<p> CODIjoo</p></textarea>
+                    <textarea id="css" class="editor tabcontent" style="display:none;" oninput="updatePreview()" spellcheck="false">body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+h1 {
+    color: #4a90e2;
+    transition: color 0.3s ease;
+}
+p {
+    color: #333;
+}</textarea>
+                    <textarea id="js" class="editor tabcontent" style="display:none;" oninput="updatePreview()" spellcheck="false">console.log("مرحبا من JavaScript!");
+document.querySelector('h1').addEventListener('click', function() {
+    this.style.color = '#' + Math.floor(Math.random()*16777215).toString(16);
+});</textarea>
+                </div>
+            </div>
+            <div class="preview-container">
+                <h2 style="padding: 10px; margin: 0; background-color: #2d2d2d; color: #d4d4d4; border-radius: 10px 10px 0 0;">LIVE Preview </h2>
+                <iframe id="preview" class="preview"></iframe>
+            </div>
+        </div>
+        <div class="controls">
+            <select id="fontSize" onchange="changeFontSize()">
+                <option value="12">Small(12px)</option>
+                <option value="14" selected>xSmall (14px)</option>
+                <option value="18" >Larg (18px)</option> 
+                <option value="24">xLarg(24px)</option>
+            </select>
+            <button onclick="toggleTheme()">Switch theme </button>
+            <button onclick="startTyping()" class="pulse">Start </button>
+        </div>
+    </div>
+     <section id="contact">
+        <div class="container">
+            <h2>Contact Me</h2>
+            <div class="social-links">
+                <a href="tel:+201092812463">
+                    <i class="fas fa-phone"></i>
+                </a>
+                <a href="https://wa.me/+201092812463">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="https://www.instagram.com/crazy_developer1698?igsh=ajNpcDRsY3VtbnF2" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.facebook.com/Crazydeveloper1698?mibextid=ZbWKwL" target="_blank">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://www.snapchat.com/add/youssif_khalid0?share_id=7FOUsdVcG50&locale=ar-EG" target="_blank">
+                    <i class="fab fa-snapchat-ghost"></i>
+                </a>
+            </div>
+        </div>
+    </section>
 
-    function openTab(evt, tabName) {
-        var i,
-        tabcontent,
-        tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
+    <script>
+        let isDarkTheme = true;
+
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+            updatePreview();
+            updateLineNumbers();
         }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-        updatePreview();
-        updateLineNumbers();
-    }
 
-    function updatePreview() {
-        var mix = document.getElementById('mix').value;
-        var html = document.getElementById('html').value;
-        var css = document.getElementById('css').value;
-        var js = document.getElementById('js').value;
-
-        var preview = document.getElementById('preview');
-        var content = '';
-
-        if (document.querySelector('.tablinks.active').textContent === 'Mixed') {
-            content = mix;
-        } else {
-            content = `${html}<style>${css}</style><script>${js}<\/script>`;
-        }
-
-        preview.srcdoc = content;
-    }
-
-    function startTyping() {
-        var activeTab = document.querySelector('.tablinks.active').textContent;
-        var targetElement;
-        var fullText;
-
-        if (activeTab === 'Mixed') {
-            targetElement = document.getElementById('mix');
-           fullText = targetElement.value;
-        } else {
+        function updatePreview() {
+            var mix = document.getElementById('mix').value;
             var html = document.getElementById('html').value;
             var css = document.getElementById('css').value;
             var js = document.getElementById('js').value;
-            fullText = `${html}\n<style>\n${css}\n</style>\n<script>\n${js}\n<\/script>`;
-        }
 
-        var index = 0;
-        targetElement.value = '';
+            var preview = document.getElementById('preview');
+            var content = '';
 
-        function typeText() {
-            if (index < fullText.length) {
-                if (activeTab === 'Mixed') {
-                    targetElement.value += fullText.charAt(index);
-                    targetElement.scrollTop = targetElement.scrollHeight;
-                } else {
-                    var parts = fullText.split('\n<style>\n');
-                    var htmlPart = parts[0];
-                    var rest = parts[1].split('\n</style>\n<script>\n');
-                    var cssPart = rest[0];
-                    var jsPart = rest[1].slice(0, -9);
-
-                    if (index < htmlPart.length) {
-                        document.getElementById('html').value = htmlPart.slice(0, index + 1);
-                        document.getElementById('html').scrollTop = document.getElementById('html').scrollHeight;
-                    } else if (index < htmlPart.length + cssPart.length + 9) {
-                        document.getElementById('css').value = cssPart.slice(0, index - htmlPart.length - 9);
-                        document.getElementById('css').scrollTop = document.getElementById('css').scrollHeight;
-                    } else {
-                        document.getElementById('js').value = jsPart.slice(0, index - htmlPart.length - cssPart.length - 18);
-                        document.getElementById('js').scrollTop = document.getElementById('js').scrollHeight;
-                    }
-                }
-                index++;
-                setTimeout(typeText, typingSpeed);
-                updatePreview();
-                updateLineNumbers();
+            if (document.querySelector('.tablinks.active').textContent === 'Mixed') {
+                content = mix;
+            } else {
+                content = `${html}<style>${css}</style><script>${js}<\/script>`;
             }
+
+            if (content[content.length - 1] !== '\n') {
+                content += '\n';
+            }
+
+            preview.srcdoc = content;
+            highlightSyntax();
         }
 
-        typeText();
-    }
+        function startTyping() {
+            var activeTab = document.querySelector('.tablinks.active').textContent;
+            var targetElement = document.getElementById('mix');
+            var fullText = targetElement.value;
 
-    function updateTypingSpeed() {
-        typingSpeed = parseInt(document.getElementById('typingSpeed').value);
-    }
+            targetElement.value = '';
+            var index = 0;
 
-    function changeFontSize() {
-        var fontSize = document.getElementById('fontSize').value;
-        document.querySelectorAll('.editor, .line-numbers').forEach(function(element) {
-            element.style.fontSize = fontSize + 'px';
-        });
+            function typeText() {
+                if (index < fullText.length) {
+                    targetElement.value += fullText.charAt(index);
+                    index++;
+                    setTimeout(typeText, 40);
+
+                    // التمرير التلقائي
+                    scrollToBottom(targetElement);
+
+                    updatePreview();
+                    updateLineNumbers();
+                }
+            }
+
+            typeText();
+        }
+
+        function scrollToBottom(element) {
+            element.scrollTop = element.scrollHeight;
+        }
+
+        function changeFontSize() {
+            var fontSize = document.getElementById('fontSize').value;
+            document.querySelectorAll('.editor, .line-numbers').forEach(function(element) {
+                element.style.fontSize = fontSize + 'px';
+            });
+            updateLineNumbers();
+        }
+
+        function toggleTheme() {
+            isDarkTheme = !isDarkTheme;
+            document.body.style.setProperty('--background-color', isDarkTheme ? '#1e1e1e' : '#ffffff');
+            document.body.style.setProperty('--text-color', isDarkTheme ? '#f0f0f0' : '#333333');
+            document.querySelectorAll('.editor').forEach(function(editor) {
+                editor.style.backgroundColor = isDarkTheme ? '#1e1e1e' : '#ffffff';
+                editor.style.color = isDarkTheme ? '#d4d4d4' : '#333333';
+            });
+            document.querySelectorAll('.line-numbers').forEach(function(lineNumbers) {
+                lineNumbers.style.backgroundColor = isDarkTheme ? '#252526' : '#f0f0f0';
+                lineNumbers.style.color = isDarkTheme ? '#858585' : '#999999';
+            });
+        }
+
+        function updateLineNumbers() {
+            var editor = document.querySelector('.editor:not([style*="display: none"])');
+            var lineNumbers = document.getElementById('lineNumbers');
+            var lines = editor.value.split('\n');
+            lineNumbers.innerHTML = lines.map((_, index) => index + 1).join('<br>');
+            
+            // مزامنة التمرير
+            lineNumbers.scrollTop = editor.scrollTop;
+        }
+
+        function highlightSyntax() {
+            var editor = document.querySelector('.editor:not([style*="display: none"])');
+            var code = editor.value;
+            var highlighted = code.replace(/(&lt;[^&]*&gt;|\b(?:function|var|let|const|if|else|for|while|return)\b|\b\d+\b|\/\/.*|\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g, function(match) {
+                if (/^&lt;/.test(match)) return '<span class="token tag">' + match + '</span>';
+                if (/^(function|var|let|const|if|else|for|while|return)$/.test(match)) return '<span class="token keyword">' + match + '</span>';
+                if (/^\d+$/.test(match)) return '<span class="token number">' + match + '</span>';
+                if (/^\/\//.test(match)) return '<span class="token comment">' + match + '</span>';
+                if (/^\/\*/.test(match)) return '<span class="token comment">' + match + '</span>';
+                if (/^"/.test(match) || /^'/.test(match)) return '<span class="token string">' + match + '</span>';
+                return match;
+            });
+            editor.innerHTML = highlighted;
+        }
+
+        updatePreview();
         updateLineNumbers();
-    }
-
-    function toggleTheme() {
-        document.body.classList.toggle('light-theme');
-        document.querySelectorAll('.editor').forEach(function(editor) {
-            editor.classList.toggle('light-theme');
-        });
-    }
-
-    function updateLineNumbers() {
-        var editor = document.querySelector('.editor:not([style*="display: none"])');
-        var lineNumbers = document.getElementById('lineNumbers');
-        var lines = editor.value.split('\n');
-        lineNumbers.innerHTML = lines.map((_, index) => index + 1).join('<br>');
-    }
-
-    // Initialize
-    updatePreview();
-    updateLineNumbers();
-    window.addEventListener('load', updatePreview);
-</script>
+        window.addEventListener('load', highlightSyntax);
+    </script>
 </body>
 </html>
